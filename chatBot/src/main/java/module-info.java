@@ -11,6 +11,9 @@ module com.example.chatbot {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
 
-    opens com.example.chatbot to javafx.fxml;
     exports com.example.chatbot;
+    opens com.example.chatbot to javafx.fxml;
+    exports com.example.chatbot.controller;
+    opens com.example.chatbot.controller to javafx.fxml;
+
 }
