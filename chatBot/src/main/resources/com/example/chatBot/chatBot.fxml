@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="508.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.chatbot.controller.chatBotController">
+   <children>
+      <AnchorPane fx:id="chatting" layoutX="6.0" layoutY="28.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="472.0" prefWidth="641.0">
+         <children>
+            <ScrollPane layoutX="-8.0" prefHeight="399.0" prefWidth="650.0">
+               <content>
+                  <FlowPane fx:id="chatPane" orientation="VERTICAL" prefHeight="396.0" prefWidth="646.0" rowValignment="TOP" />
+               </content>
+            </ScrollPane>
+            <TextArea fx:id="textSpace" layoutX="-1.0" layoutY="399.0" prefHeight="73.0" prefWidth="562.0" promptText="Say hello to our chat bot..." wrapText="true">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextArea>
+            <Button layoutX="570.0" layoutY="417.0" mnemonicParsing="false" onMouseClicked="#sendMessage" prefHeight="42.0" prefWidth="63.0" text="Send" />
+         </children>
+      </AnchorPane>
+      <MenuBar fx:id="Menu" layoutY="1.0" prefHeight="26.0" prefWidth="650.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Label layoutX="293.0" layoutY="-8.0" prefHeight="42.0" prefWidth="76.0" text="Chatbot1.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
