@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -16,22 +17,23 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 class VoiceAssitant {
     public static void main(String[] args) {
         mainMenu();
     }
 
-    public static void mainMenu() {
+    public static void mainMenu() {   // The main menu keyboard enters the interface
         while (true) {
-            Scanner scanner = new Scanner(System.in);  // Create a Scanner object
+            Scanner scanner = new Scanner(System.in);
             System.out.println("--------------------------main menu----------------------------");
             System.out.println("Select one option from below: press number");
             System.out.println("1. Create a prototype quetion.");
             System.out.println("2. Create actions for a prototype question.");
             System.out.println("3. Start using VoiceCommand.");
             System.out.println("---------------------------------------------------------------");
-            String num = scanner.nextLine().trim();  // Read user input
-            
+            String num = scanner.nextLine().trim();
+
             try {
                 int selection = Integer.parseInt(num);
                 switch (selection) {
@@ -53,7 +55,7 @@ class VoiceAssitant {
             }
         }
     }
-
+    //The first menu item accepts a text instruction to reply to number3
     public static void voiceCommand(Scanner scanner) {
         while (true) {
             System.out.println("Please enter command: ");
@@ -64,7 +66,7 @@ class VoiceAssitant {
             System.out.println("Enter QUIT to quit");
         }
     }
-
+    //Give an answer and print it in txt
     public static void getAnswer(String command) {
         List<String> lines = readFile("sample.txt");
         List<List<String>> trunks = separateQuestions(lines);
@@ -80,7 +82,7 @@ class VoiceAssitant {
         String question = "";
         int questionIndex = 0;
         for (int i = 0; i < questions.size(); i++) {
-            int score = compareSen(questions.get(i), command);
+            int score = compareSen(questions.get(i), command);  //the most similar to the template, that trunk
             if (score >= maxScore) {
                 maxScore = score;
                 question = questions.get(i);
@@ -91,17 +93,17 @@ class VoiceAssitant {
         String[] words = question.split(" ");
         String[] commandWords = command.split(" ");
         List<Integer> indexes = getPlaceHolderIndexes(words);
-        HashMap<String, HashMap<String, String>> findAnswer = getPossibleAnswers(trunks.get(questionIndex));
-        String answer = searchAnswer(findAnswer, words, commandWords, indexes);
+        HashMap<String, HashMap<String, String>> findAnswer = getPossibleAnswers(trunks.get(questionIndex));   //Calls getPossibleAnswers
+        String answer = searchAnswer(findAnswer, words, commandWords, indexes);    //searchAnswer was called，ccommandWords is an array of each word that comes in to command，
         System.out.println("---------------------------------------------------------------");
         System.out.println("Response: " + answer);
         System.out.println("---------------------------------------------------------------");
         
     }
-
+    //txt，several questions means several trunks, question one is index[0]
     public static HashMap<String, HashMap<String, String>> getPossibleAnswers(List<String> trunk) {
         List<String> filteredT = new ArrayList<String>();
-        for (String ea: trunk) {    //ea is every line of trunk
+        for (String ea: trunk) {    //ea is every line of trunk，each line
             if (ea.contains("Action")) {
                 filteredT.add(ea);
             }
@@ -110,7 +112,7 @@ class VoiceAssitant {
         for (String line: filteredT) {
             String answer = "";
             HashMap<String, String> valueMap = new HashMap<String, String>();
-            String[] splits = line.split(" ");   // 把subject里面的分割成一个一个的单词
+            String[] splits = line.split(" ");   // Split into words
             for (int i = 0; i < splits.length; i++) {
                 if (!splits[i].contains("Action")) {
                     if (splits[i-1].contains(">")) {
@@ -126,30 +128,30 @@ class VoiceAssitant {
         }
         return findAnswer;
     }
-
+    //All possible answers come in, finding a value that matches the index exactly
     public static String searchAnswer(HashMap<String, HashMap<String, String>> findAnswer,
                                       String[] words, String[] commandWords, List<Integer> indexes) {
-        //index是模板问题里面的placeholder的索引
+
         HashMap<String, String> commandInput = new HashMap<String, String>();
-        for (int index: indexes) {
+        for (int index: indexes) {        //the index of the placeholder in the template question
             commandInput.put(words[index], commandWords[index]);
         }
-        int maxScore = 0;   //
+        int maxScore = 0;
         String finalAnswer = "";
         String noMatchAnswer = "";
         for (Map.Entry<String, HashMap<String, String>> entry : findAnswer.entrySet()) {
-            String answer = entry.getKey();
+            String answer = entry.getKey();   //The key of the outer hashmap
             int score = 0;
             HashMap<String, String> valueMap = entry.getValue();
-            for (Map.Entry<String, String> entry2 : valueMap.entrySet()) {
+            for (Map.Entry<String, String> entry2 : valueMap.entrySet()) {   //inner hash function, iterates through each element, taking the key and value
                 String key = entry2.getKey();
                 String inputValue = commandInput.get(key);
                 String testValue = entry2.getValue();
-                if (inputValue.equals(testValue)) {
+                if (inputValue.equals(testValue)) {     //The value corresponding to the placeholder in command means input value
                     score += 1;
                 }
             }
-            if (score > maxScore) {
+            if (score > maxScore) {    //The highest score, the action is the most correct
                 finalAnswer = answer;
                 maxScore = score;
             }
@@ -162,9 +164,9 @@ class VoiceAssitant {
         }
         return finalAnswer;
     }
-
+    //The question is split into an array of words
     public static List<Integer> getPlaceHolderIndexes(String[] words) {
-        //Get placeholder indexes
+        //
         List<Integer> indexes = new ArrayList<Integer>();
         for (int i = 0; i < words.length; i++) {
             if (words[i].contains("<") && words[i].contains(">")) {
@@ -173,18 +175,18 @@ class VoiceAssitant {
         }
         return indexes;
     }
-
+    //
     public static int compareSen(String a, String b) {
-        //compare the two sentences, and return a score for similarity
+        //The more identical words appear, the higher the similarity
         final Set<String> words = new HashSet<>(Arrays.asList(a.toLowerCase().split("\\s+")));
         final Set<String> words2 = new HashSet<>(Arrays.asList(b.toLowerCase().split("\\s+")));
         words.retainAll(words2);
-        return words.size();
+        return words.size();   //Returns the same number of words
     }
-
+    //Number 2 of the main menu
     public static void createActions(Scanner scanner) {
         List<String> lines = readFile("sample.txt");
-        List<List<String>> trunks = separateQuestions(lines);
+        List<List<String>> trunks = separateQuestions(lines);  //Lines are each line inside the txt
         List<List<String>> newTrunks = new ArrayList<List<String>>();
 
         while(true) {
@@ -197,23 +199,23 @@ class VoiceAssitant {
             }
             System.out.println(counter + ".   Exit");
             System.out.println("---------------------------------------------------------------");
-            String num = scanner.nextLine().trim();  // Read user input
+            String num = scanner.nextLine().trim();
             int trunkIndex = Integer.parseInt(num) - 1;
 
             try {
-                //user wants to exit
+                //?The user wants to quit
                 if (trunkIndex == counter - 1) {
                     break;
                 }
 
                 List<String> resTrunk = trunks.get(trunkIndex);
-                String actionLine = createActionsFromQ(resTrunk, getPlaceHolders(resTrunk), scanner);
+                String actionLine = createActionsFromQ(resTrunk, getPlaceHolders(resTrunk), scanner);  //Call createActionsFromQ()
                 List<String> trunkMod = trunks.get(trunkIndex);
                 trunkMod.add(actionLine);
                 newTrunks = new ArrayList<List<String>>(trunks);
                 newTrunks.set(trunkIndex, trunkMod);
 
-                //Overwrite file including the newly added action
+                //
                 lines = new ArrayList<String>();
                 for (List<String> t: newTrunks) {
                     for (String line: t) {
@@ -228,7 +230,7 @@ class VoiceAssitant {
             }
         }
     }
-
+    //Pass in all rows of txt and return all trunks
     public static List<List<String>> separateQuestions(List<String> lines) {
         List<String> trunk = new ArrayList<String>();
         List<List<String>> trunks = new ArrayList<List<String>>();
@@ -250,7 +252,7 @@ class VoiceAssitant {
         }
         return trunks;
     }
-
+    //The user selects a certain trunk, all the placeholders in the question
     public static String createActionsFromQ(List<String> trunk, List<String> placeHolders, Scanner scanner) {
         List<String> actionValues = new ArrayList<String>();
         System.out.println("==============================================================");
@@ -261,7 +263,7 @@ class VoiceAssitant {
 
         for (String p: placeHolders) {
             System.out.println("Set value for <" + p + "> " + "or Enter SKIP");
-            String value = scanner.nextLine().trim();  // Read user input
+            String value = scanner.nextLine().trim();
             if (value.equalsIgnoreCase("skip")) {
                 value = "";
             }
@@ -269,7 +271,7 @@ class VoiceAssitant {
         }
         
         System.out.println("Set response: ");
-        String res = scanner.nextLine().trim();  // Read user input
+        String res = scanner.nextLine().trim();  // user input
         
         String lineFinal = "Action";
         for (int i = 0; i < placeHolders.size(); i++) {
@@ -278,9 +280,9 @@ class VoiceAssitant {
             }
         }
         lineFinal += " " + res;
-        return lineFinal;
+        return lineFinal;    //Returns a line, a sentence that begins with action
     }
-
+    //Pass in a trunk and get the placeholder corresponding to the slot
     public static List<String> getPlaceHolders(List<String> trunk) { 
         String currentPlaceholder = "";
         List<String> placeHolders = new ArrayList<String>();
@@ -301,38 +303,8 @@ class VoiceAssitant {
         return placeHolders;
     }
 
-    public static HashMap<String, List<String>> getValueSets(List<String> trunk) { 
-        HashMap<String, List<String>> valueSets = new HashMap<String, List<String>>();
-        String currentPlaceholder = "";
-        List<String> values = new ArrayList<String>();
-        int lineNum = 1;
-        List<String> filteredT = new ArrayList<String>();
-        for (String ea: trunk) {
-            if (ea.contains("Slot")) {
-                filteredT.add(ea);
-            }
-        }
-        for (String line: filteredT) {
-            String placeHolder = findMatch("<(\\S*)>", line);
-            if (!placeHolder.equals(currentPlaceholder)) {
-                if (lineNum > 1) 
-                    valueSets.put(currentPlaceholder, values);
-                values = new ArrayList<String>();
-                currentPlaceholder = placeHolder;
-                String value = findMatch("^\\S* *\\S* *(\\S*)$", line);
-                values.add(value);
-            } else {
-                String value = findMatch("^\\S* *\\S* *(\\S*)$", line);
-                values.add(value);
-            }
-            // read values from last line
-            if (lineNum == filteredT.size())
-                valueSets.put(currentPlaceholder, values);
-            lineNum++;
-        }
-        return valueSets;
-    }
 
+    //The first function of the main interface is number1
     public static void createProtoSen(Scanner scanner) {
         boolean finish = false; 
         while(!finish) {
@@ -347,7 +319,7 @@ class VoiceAssitant {
             if (!userPrompt(scanner))
                 continue;
 
-            // Record the prototype command to the document
+            //Document the prototype command to the txt
             String question = "   Question   " + protoSen;
             List<String> slotLines = recordSlots(placeHolders, scanner);
             slotLines.add(0, question);
@@ -361,7 +333,7 @@ class VoiceAssitant {
             finish = true;
         }
     }
-
+    //Regular expression matching
     public static String findMatch(String regex, String input) {
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(input);
@@ -373,16 +345,7 @@ class VoiceAssitant {
         }
     }
 
-    public static List<String> findMatch2(String regex, String input) {
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(input);
-        List<String> matchlist = new ArrayList<String>();
-        while (matcher.find()) {
-            matchlist.add(matcher.group());
-        }
-        return matchlist;
-    }
-
+    //Read the file
     public static List<String> readFile(String path) {
         try {
             File file = new File(path);
@@ -399,7 +362,7 @@ class VoiceAssitant {
             return null;
         }
     }
-
+    //Write data
     public static void writeFile(List<String> lines, String path) {
         try {
             File fout = new File(path);
@@ -414,17 +377,17 @@ class VoiceAssitant {
             System.out.println(IOException.toString());
         }
     }
-
+    //Confirm that yes returns true and no returns false
     public static boolean userPrompt(Scanner scanner) {
         System.out.println("Enter YES to continue, Enter NO to redo: ");
-        String conti = scanner.nextLine().trim();  // Read user input
-        if (conti.equalsIgnoreCase("yes")) {
+        String conti = scanner.nextLine().trim();
+        if (conti.equalsIgnoreCase("yes")) {    //.equalsIgnoreCase()
             return true;
         } else {
             return false;
         }
     }
-
+    //Pass in a sentence and return to the placeholder list
     public static List<String> splitProtoSen(String protoSen) {
         String[] substrings = protoSen.split(" ");
         String resp = "";
@@ -443,7 +406,7 @@ class VoiceAssitant {
         System.out.println("---------------------------------------------------------------");
         return placeholderList;
     }
-
+    //User input data becomes a string like the slot line
     public static List<String> recordSlots(List<String> placeHolders, Scanner scanner) {
         List<String> slotLines = new ArrayList<String>();
         for (String slot: placeHolders) {
