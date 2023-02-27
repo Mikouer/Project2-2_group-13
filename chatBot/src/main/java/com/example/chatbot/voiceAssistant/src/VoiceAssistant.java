@@ -367,8 +367,8 @@ class VoiceAssitant {
 
     public static void writeFile(List<String> lines, String path) {
         try {
-            File font = new File(path);
-            FileOutputStream fos = new FileOutputStream(font);
+            File f = new File(path);
+            FileOutputStream fos = new FileOutputStream(f);
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
             for (String line : lines) {
                 bw.write(line);
