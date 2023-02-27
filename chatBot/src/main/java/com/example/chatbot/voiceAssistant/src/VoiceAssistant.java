@@ -5,19 +5,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 class VoiceAssitant {
     public static void main(String[] args) {
@@ -29,7 +24,7 @@ class VoiceAssitant {
             Scanner scanner = new Scanner(System.in);
             System.out.println("--------------------------main menu----------------------------");
             System.out.println("Select one option from below: press number");
-            System.out.println("1. Create a prototype quetion.");
+            System.out.println("1. Create a prototype question.");
             System.out.println("2. Create actions for a prototype question.");
             System.out.println("3. Start using VoiceCommand.");
             System.out.println("---------------------------------------------------------------");
@@ -106,7 +101,7 @@ class VoiceAssitant {
     // Several problems in txt are several trunks，All actions in the problem are returned
     public static HashMap<String, HashMap<String, String>> getPossibleAnswers(List<String> trunk) {
         List<String> filteredT = new ArrayList<String>();
-        for (String ea : trunk) { // ea is every line of trunk，each line
+        for (String ea : trunk) { // ea means each line
             if (ea.indexOf("Action") >= 0) {
                 filteredT.add(ea);
             }
@@ -115,7 +110,7 @@ class VoiceAssitant {
         for (String line : filteredT) {
             String answer = "";
             HashMap<String, String> valueMap = new HashMap<String, String>();
-            String[] splits = line.split(" "); // <subject> Split into words
+            String[] splits = line.split(" "); // like <subject> split into words
             for (int i = 0; i < splits.length; i++) {
                 if (splits[i].indexOf("Action") < 0) {
                     if (splits[i - 1].indexOf(">") >= 0) {
@@ -126,7 +121,7 @@ class VoiceAssitant {
                     }
                 }
             }
-            answer = answer.trim();
+            answer = answer.trim();  //Remove leading and trailing blank symbols from strings
             findAnswer.put(answer, valueMap);
         }
         return findAnswer;
@@ -145,10 +140,10 @@ class VoiceAssitant {
         String noMatchAnswer = "";
         Iterator<Map.Entry<String, HashMap<String, String>>> iterator = findAnswer.entrySet().iterator();
         while (iterator.hasNext()) {
-            Map.Entry<String, HashMap<String, String>> entry = iterator.next();
-            String answer = entry.getKey();
+            Map.Entry<String, HashMap<String, String>> entry1 = iterator.next();
+            String answer = entry1.getKey();
             int score = 0;
-            HashMap<String, String> valueMap = entry.getValue();
+            HashMap<String, String> valueMap = entry1.getValue();
             for (Map.Entry<String, String> entry2 : valueMap.entrySet()) {
                 String key = entry2.getKey();
                 String inputValue = commandInput.get(key);
@@ -196,7 +191,7 @@ class VoiceAssitant {
         for (String e : word2) {
             w2.add(e);
         }
-        w1.retainAll(w2);
+        w1.retainAll(w2);   //retainAll() Used to retain those elements of the arraylist that are also present in the specified set,
         return w1.size();
     }
 
@@ -217,11 +212,11 @@ class VoiceAssitant {
             }
             System.out.println(counter + ".   Exit");
             System.out.println("---------------------------------------------------------------");
-            String num = scanner.nextLine().trim(); // Read user input
-            int trunkIndex = Integer.parseInt(num) - 1;
+            String num = scanner.nextLine().trim(); // input is String
+            int trunkIndex = Integer.parseInt(num) - 1;  //Returns the original data type of String as a decimal integer
 
             try {
-                // The printed sequence number is 1, but the index is 0
+                // The printed question number is 1, but the index is 0
                 if (trunkIndex == counter - 1) {
                     break;
                 }
@@ -265,7 +260,7 @@ class VoiceAssitant {
                 trunk = new ArrayList<String>();
                 trunk.add(line);
             }
-            // read the last trunk
+            // the last trunk
             if (lineNum == lines.size())
                 trunks.add(trunk);
             lineNum++;
@@ -311,7 +306,7 @@ class VoiceAssitant {
         String pre = "";
         for (String ea : trunk) {
             if (ea.indexOf("Slot") >= 0 && ea.indexOf("<") >= 0) {
-                String word = ea.substring(ea.indexOf("<") + 1, ea.indexOf(">"));
+                String word = ea.substring(ea.indexOf("<") + 1, ea.indexOf(">"));    //.substring() Extract substring from text
                 if (!word.equals(pre)) {
                     pre = word;
                     placeHolders.add(pre);
@@ -372,8 +367,8 @@ class VoiceAssitant {
 
     public static void writeFile(List<String> lines, String path) {
         try {
-            File fout = new File(path);
-            FileOutputStream fos = new FileOutputStream(fout);
+            File font = new File(path);
+            FileOutputStream fos = new FileOutputStream(font);
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
             for (String line : lines) {
                 bw.write(line);
@@ -389,7 +384,7 @@ class VoiceAssitant {
     public static boolean userPrompt(Scanner scanner) {
         System.out.println("Enter YES to continue, Enter NO to redo: ");
         String conti = scanner.nextLine().trim();
-        if (conti == "Y" || conti == "y") { // .equalsIgnoreCase()
+        if (conti.equalsIgnoreCase("yes")) {
             return true;
         } else {
             return false;
@@ -416,7 +411,7 @@ class VoiceAssitant {
         return placeholderList;
     }
 
-    // The user enters data into the same as the slot line
+    // User input data becomes a string on the slot line
     public static List<String> recordSlots(List<String> placeHolders, Scanner scanner) {
         List<String> slotLines = new ArrayList<String>();
         for (String slot : placeHolders) {
