@@ -1,3 +1,5 @@
+package src;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -5,38 +7,46 @@ import java.util.Scanner;
 public class Problem {
     public String pname;
     public List<Slot> slots;
-
+    public List<String> actions;
     public void init() {
         slots = new ArrayList<Slot>();
     }
 
     public void create(Scanner scanner) {
         boolean finish = false;
-        while (!finish) {
-            System.out.println("");
-            System.out.println("---------------------------------------------------------------");
-            System.out.println("Set a Template-based skill with a command with placeholders: ");
-            System.out.println("For example: Which lectures are there on <DAY> at <TIME> ?");
-            System.out.println("---------------------------------------------------------------");
-            System.out.println("Please enter a prototype sentence in the format above: ");
-            String protoSen = scanner.nextLine().trim();
-            List<String> placeHolders = splitProblem(protoSen);
-            // Record template questions in txt
-            String question = "   Question   " + protoSen;
-            pname = question;
-//            System.out.println(placeHolders.toString());
-            slots = recordSlots(placeHolders);
-            System.out.println("---------------------------------------------------------------");
-            System.out.println("The prototype sentence has been saved.");
-            System.out.println("---------------------------------------------------------------");
-            finish = true;
+        System.out.println("");
+        System.out.println("---------------------------------------------------------------");
+        System.out.println("Set a Template-based skill with a command with placeholders: ");
+        System.out.println("For example: Which lectures are there on <DAY> at <TIME>");
+        System.out.println("---------------------------------------------------------------");
+        System.out.println("Please enter a prototype sentence in the format above: ");
+        String protoSen = scanner.nextLine().trim();
+        List<String> placeHolders = splitProblem(protoSen);
+
+        String question = "   Question   " + protoSen;
+        pname = question;
+        System.out.println(placeHolders.toString());
+        slots = recordSlots(placeHolders);
+        finish = true;
+        List<String> lines = FileManage.readFile("src\\sample.txt");
+        lines.add(pname);
+        for (Slot slot : slots) {
+            List<String> values = slot.values;
+            for (String value : values) {
+                lines.add("Slot   <" + slot.sname + ">   " + value);
+            }
         }
+        FileManage.writeFile(lines, "src\\sample.txt");
+        System.out.println("---------------------------------------------------------------");
+        System.out.println("The prototype sentence has been saved.");
+        System.out.println("---------------------------------------------------------------");
+
     }
 
-    private List<String> splitProblem(String problemName) {
-        String[] substrings = problemName.split(" ");
+    private List<String> splitProblem(String problemname) {
+        String[] substrings = problemname.split(" ");
         String resp = "";
-//        System.out.println(substrings.toString());
+        System.out.println(substrings.toString());
         List<String> placeholderList = new ArrayList<String>();
         for (String subStr : substrings) {
             if (subStr.indexOf("<") >= 0 && subStr.indexOf(">") >= 0) {
@@ -69,7 +79,6 @@ public class Problem {
             System.out.println("");
             System.out.println("---------------------------------------------------------------");
             System.out.println("Possible Values are: ");
-//            System.out.println(values[0]);
             for (String value : values) {
                 slotres.addValues(value);
                 System.out.println(value);
