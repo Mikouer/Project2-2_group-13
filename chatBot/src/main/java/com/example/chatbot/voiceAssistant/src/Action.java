@@ -12,10 +12,10 @@ public class Action {
         this.answer = answer;
     }
 
-    public void create(Scanner scanner) {
+    public void create(Scanner scanner){
         operator=new Operator();
         List<String> lines = FileManage.readFile("src\\sample.txt");
-        List<List<String>> trunks = operator.separateQuestions(lines);
+        List<List<String>> trunks = operator.separateQuestions(lines); //Call separateQuestions, lines are each line inside txt
         List<List<String>> newTrunks = new ArrayList<List<String>>();
 
         while (true) {
@@ -28,11 +28,11 @@ public class Action {
             }
             System.out.println(counter + ".   Exit");
             System.out.println("---------------------------------------------------------------");
-            String num = scanner.nextLine().trim();
+            String num = scanner.nextLine().trim(); // set which number question's action
             int trunkIndex = Integer.parseInt(num) - 1;
 
             try {
-
+                // The user wants to exit
                 if (trunkIndex == counter - 1) {
                     break;
                 }
@@ -44,7 +44,7 @@ public class Action {
                 newTrunks = new ArrayList<List<String>>(trunks);
                 newTrunks.set(trunkIndex, trunkMod);
 
-
+                // Override txt, including newly added operations
                 lines = new ArrayList<String>();
                 for (List<String> t : newTrunks) {
                     for (String line : t) {
@@ -60,10 +60,11 @@ public class Action {
         }
     }
 
+    // get slot
     public List<String> getPlaceHolders(List<String> trunk) {
         List<String> placeHolders = new ArrayList<String>();
         String pre = "";
-        for (String ea : trunk) {// 获取关键词
+        for (String ea : trunk) {
             if (ea.indexOf("Slot") == 0 && ea.indexOf("<") >= 0) {
                 String word = ea.substring(ea.indexOf("<") + 1, ea.indexOf(">"));
                 if (!word.equals(pre)) {
@@ -84,23 +85,21 @@ public class Action {
         System.out.println("==============================================================");
         List<Slot> slots = new ArrayList<Slot>();
         slots = chooseValue(trunk);
-        System.out.println(slots.size() + "p大小");
         for (Slot p : slots) {
 
             int count = 1;
-            System.out.println("choose a  value for <" + p.sname + "> " + "or Enter SKIP");
+            System.out.println("choose a  value for <" + p.sname + "> ");
             List<String> values = p.values;
             System.out.println(values.size());
             for (String value : values) {
                 System.out.println(count + " " + value);
                 count++;
             }
-            int value = Integer.parseInt(scanner.nextLine().trim());
+            int value = Integer.parseInt(scanner.nextLine().trim()); // The input is value
             actionValues.add(values.get(value - 1));
         }
         System.out.println("Set response: ");
-        String res = scanner.nextLine().trim();
-
+        String res = scanner.nextLine().trim(); // The answer corresponding to the action
         String lineFinal = "Action";
         for (int i = 0; i < placeHolders.size(); i++) {
             if (actionValues.get(i) != "") {
@@ -108,7 +107,7 @@ public class Action {
             }
         }
         lineFinal += " " + res;
-        return lineFinal;
+        return lineFinal; // Returns a line, a sentence that begins with action
     }
 
     public List<Slot> chooseValue(List<String> trunk) {

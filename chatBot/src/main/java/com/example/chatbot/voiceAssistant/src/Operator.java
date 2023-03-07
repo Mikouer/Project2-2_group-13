@@ -2,9 +2,10 @@ package src;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//Methods shared by multiple classes
 public class Operator {
-    public List<List<String>> separateQuestions(List<String> lines) {
+    //Extract all questions from strings in txt
+    public List<List<String>> separateQuestions(List<String> lines){
         List<String> trunk = new ArrayList<String>();
         List<List<String>> trunks = new ArrayList<List<String>>();
         // divide proto sentences in trunks
@@ -26,6 +27,7 @@ public class Operator {
         return trunks;
     }
 
+    //Extract the slots for each question and the value of each slot
     public List<Slot> getSlots(List<String> trunk) {
         List<Slot> keys = new ArrayList<Slot>();
         Slot slot = new Slot();
@@ -55,7 +57,9 @@ public class Operator {
         keys.add(slot);
         return keys;
     }
-    public List<String> getActions(List<String> trunk) {
+
+    //Extract actions from each line in txt
+    public List<String> getActions(List<String> trunk){
         List<String> actions =new ArrayList<String>();
         String action;
         for(String line:trunk)

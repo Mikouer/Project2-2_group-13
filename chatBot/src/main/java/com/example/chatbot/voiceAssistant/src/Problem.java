@@ -13,21 +13,18 @@ public class Problem {
     }
 
     public void create(Scanner scanner) {
-        boolean finish = false;
         System.out.println("");
         System.out.println("---------------------------------------------------------------");
         System.out.println("Set a Template-based skill with a command with placeholders: ");
         System.out.println("For example: Which lectures are there on <DAY> at <TIME>");
         System.out.println("---------------------------------------------------------------");
         System.out.println("Please enter a prototype sentence in the format above: ");
-        String protoSen = scanner.nextLine().trim();
-        List<String> placeHolders = splitProblem(protoSen);
-
+        String protoSen = scanner.nextLine().trim(); // What is passed in is the sentence entered by the user
+        List<String> placeHolders = splitProblem(protoSen);// The input sentence is split into strings
+        // Document the prototype question to the txt
         String question = "   Question   " + protoSen;
         pname = question;
-        System.out.println(placeHolders.toString());
         slots = recordSlots(placeHolders);
-        finish = true;
         List<String> lines = FileManage.readFile("src\\sample.txt");
         lines.add(pname);
         for (Slot slot : slots) {
@@ -43,6 +40,7 @@ public class Problem {
 
     }
 
+    //Break the problem into words
     private List<String> splitProblem(String problemname) {
         String[] substrings = problemname.split(" ");
         String resp = "";
@@ -63,6 +61,7 @@ public class Problem {
         return placeholderList;
     }
 
+    //Set values for slot
     private List<Slot> recordSlots(List<String> placeHolders) {
         Scanner scanner = new Scanner(System.in);
         List<Slot> slotLines = new ArrayList<Slot>();
