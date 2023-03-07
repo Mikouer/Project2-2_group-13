@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="513.0" prefWidth="487.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button fx:id="UseCreateSkill" layoutX="144.0" layoutY="257.0" mnemonicParsing="false" onAction="#GoToCreateSkill" prefHeight="62.0" prefWidth="200.0" text="Create Skill">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="UseChatbot" layoutX="144.0" layoutY="176.0" mnemonicParsing="false" onAction="#GoToChatbot" prefHeight="62.0" prefWidth="200.0" text="Use Chatbot">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="Instructions" layoutX="144.0" layoutY="342.0" mnemonicParsing="false" onAction="#GoToInstructions" prefHeight="62.0" prefWidth="200.0" text="Instructions">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Label layoutX="163.0" layoutY="74.0" text="Group 13" textAlignment="CENTER" textFill="#39415b">
+         <font>
+            <Font size="39.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
