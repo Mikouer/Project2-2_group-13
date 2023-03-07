@@ -1,0 +1,50 @@
+   Question   What is my <subject> grade?
+Slot   <subject>   DSA
+Slot   <subject>   CNN
+Slot   <subject>   Math
+Slot   <subject>   English
+Slot   <subject>   Artist
+Action <subject> DSA The score for DSA is 7.
+Action <subject> CNN The score for CNN is 8.
+Action I don't know the score.
+   Question   What is the <activities> on <day> at <time>?
+Slot   <activities>   lesson
+Slot   <activities>   BBQ
+Slot   <activities>   movie
+Slot   <activities>   biking
+Slot   <day>   10
+Slot   <day>   15
+Slot   <day>   20
+Slot   <day>   25
+Slot   <time>   7:00
+Slot   <time>   8:00
+Slot   <time>   9:00
+Slot   <time>   10:00
+Action <activities> lesson <day> 10 <time> 7:00 lesson is on 10th at 7:00am
+Action <activities> BBQ <day> 15 <time> 8:00 our BBQ begins on 15th at 8:00a.m.
+Action <activities> movie <day> 25 <time> 10:00 we can see a movie on 25th at 10:00
+Action <activities> BBQ aaa BBQ begins on 15th at 8:00a.m.
+Action I don't know.
+   Question   what is <s> <b>?
+Slot   <s>   my
+Slot   <s>   your
+Slot   <s>   her
+Slot   <b>   a
+Slot   <b>   PE
+Slot   <b>   c
+Action <s> your <b> PE  
+Action <s> my <b> PE  is good
+   Question   what <a>?
+Slot   <a>   1
+Slot   <a>   2
+Slot   <a>   3
+   Question   what is <god>?
+Slot   <god>   1
+Slot   <god>   2
+Slot   <god>   1
+Action god is exist.
+   Question   Do you want to eat <food>?
+Slot   <food>   chicken
+Slot   <food>   beef
+Slot   <food>   pie
+Action <food> chicken I love it very much.
